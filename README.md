@@ -31,8 +31,8 @@ usada aqui. **Confirme sempre no portal da Sul América antes de contratar.**
 # 1) baixar produtos_e_prestadores_hospitalares.zip (≈1,4 GB) do link da ANS acima
 python filtrar_ans.py "caminho/produtos_e_prestadores_hospitalares.zip"   # -> rede_hospitalar_sulamerica.csv
 python enriquecer_cnes.py      # completa endereço/telefone dos hospitais novos (usa cache_cnes.json)
-python gerar_site.py           # -> index.html
+python montar_site.py          # -> index.html no padrão das redes Mazza (baixa o modelo do rede-amil-bradesco)
 git add -A && git commit -m "Atualiza rede (ANS <data>)" && git push
 ```
 
-Visual da página: `modelo-site.html` (o `gerar_site.py` injeta os dados nele).
+Visual: a mesma página da Bradesco/SulAmérica PME do `rede-amil-bradesco` (pasta `modelo/`, baixada a cada montagem); o `montar_site.py` troca dados, textos e cores.
