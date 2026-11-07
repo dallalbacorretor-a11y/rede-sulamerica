@@ -1,38 +1,39 @@
-# Rede Hospitalar Sul América · Adesão — Mazza Broker
+# Rede Sul América Saúde — Mazza Broker
 
-Consulta da **rede hospitalar** dos planos Sul América **Coletivo por Adesão** no Brasil inteiro,
-por estado, cidade e plano, com pronto-socorro e maternidade:
+Rede referenciada da Sul América Saúde dos planos **Clássico 100 Enfermaria** e **Especial 100**
+(PME; Empresarial e PME Mais têm a mesma rede), no padrão das redes Mazza (mesma página da
+Bradesco/SulAmérica do `rede-amil-bradesco`).
 
-| Plano | Registro ANS |
+- **Curitiba e região metropolitana (11 cidades):** rede **completa** — hospitais, clínicas, médicos,
+  laboratórios e imagem — da busca oficial da Sul América (consulta de 25/09/2026, a mesma da Central de Rede).
+- **Demais cidades do Brasil:** rede **hospitalar** dos mesmos planos, pela base aberta da ANS
+  "Produtos e Prestadores Hospitalares", com endereço e telefone do CNES.
+
+Registros ANS usados (portal Sul América, detalhes do plano):
+Clássico 100 (557/69300): 500.529/24-9, 500.521/24-3, 500.530/24-2, 500.522/24-1 ·
+Especial 100 (553/17924): 488.497/21-3, 469.523/13-2, 499.569/24-4, 473.982/15-5, 499.559/24-7,
+499.570/24-8, 499.558/24-9, 463.421/10-7.
+
+## Arquivos
+
+| Arquivo | O que é |
 |---|---|
-| Clássico 100 Enfermaria | 500.480/24-2 |
-| Especial 100 RC | 495.735/23-1 |
-| Especial 100 R.1 | 495.737/23-7 |
+| `busca_pme/` | rede completa por cidade (JSON) + nomes das especialidades |
+| `sa_comum.py` | classificação dos prestadores (cópia do `montar_sulamerica.py` do rede-amil-bradesco) |
+| `filtrar_ans.py` | filtra a base da ANS pelos registros acima → `rede_hospitalar_sulamerica.csv` |
+| `enriquecer_cnes.py` | endereço/telefone/maternidade pelo CNES (cache em `cache_cnes.json`) |
+| `montar_site.py` | monta `index.html` no padrão (baixa o modelo em `modelo/`) |
 
-Abre filtrada por link: `?uf=PR&cidade=Curitiba` (e `&q=pilar` para buscar um nome).
-
-## De onde vêm os dados
-
-1. **ANS — dados abertos "Produtos e Prestadores Hospitalares"**
-   (`dadosabertos.ans.gov.br/FTP/PDA/produtos_e_prestadores_hospitalares/`): a rede hospitalar que a
-   operadora informa à ANS, por registro do produto. Entram só vínculos ativos (sem data de fim).
-   Traz se o contrato inclui urgência/emergência (**PS**).
-2. **CNES / Ministério da Saúde** (`apidadosabertos.saude.gov.br/cnes/estabelecimentos/<cnes>`):
-   nome completo, endereço, bairro, telefone, coordenadas e se tem centro obstétrico (**Maternidade**).
-3. **IBGE** (`servicodados.ibge.gov.br`): nome do município pelo código.
-
-A base da ANS **não traz consultórios, clínicas e laboratórios** — só a rede hospitalar.
-A busca do site da Sul América (rederef-saude) exige reCAPTCHA em cada pesquisa, por isso não é
-usada aqui. **Confirme sempre no portal da Sul América antes de contratar.**
-
-## Como atualizar (a ANS atualiza a base todo mês)
+## Como atualizar
 
 ```sh
-# 1) baixar produtos_e_prestadores_hospitalares.zip (≈1,4 GB) do link da ANS acima
-python filtrar_ans.py "caminho/produtos_e_prestadores_hospitalares.zip"   # -> rede_hospitalar_sulamerica.csv
-python enriquecer_cnes.py      # completa endereço/telefone dos hospitais novos (usa cache_cnes.json)
-python montar_site.py          # -> index.html no padrão das redes Mazza (baixa o modelo do rede-amil-bradesco)
-git add -A && git commit -m "Atualiza rede (ANS <data>)" && git push
+# hospitais (a ANS atualiza todo mês): baixar produtos_e_prestadores_hospitalares.zip (≈1,4 GB)
+# de https://dadosabertos.ans.gov.br/FTP/PDA/produtos_e_prestadores_hospitalares/
+python filtrar_ans.py "caminho/produtos_e_prestadores_hospitalares.zip"
+python enriquecer_cnes.py
+python montar_site.py
+git add -A && git commit -m "Atualiza rede" && git push
 ```
 
-Visual: a mesma página da Bradesco/SulAmérica PME do `rede-amil-bradesco` (pasta `modelo/`, baixada a cada montagem); o `montar_site.py` troca dados, textos e cores.
+A busca do site da Sul América exige reCAPTCHA; os dados de `busca_pme/` vêm da consulta já feita e
+guardada no `rede-amil-bradesco`. **Confirme sempre no portal da Sul América antes de contratar.**

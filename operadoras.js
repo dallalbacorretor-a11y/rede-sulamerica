@@ -7,8 +7,7 @@
   var OPERADORAS = [
     { id: "amil", nome: "Amil" },
     { id: "bradesco", nome: "Bradesco", longo: " Saúde" },
-    { id: "sulamerica", nome: "SulAmérica", longo: " PME" },
-    { id: "sulamerica-adesao", nome: "SulAmérica Adesão", url: "https://dallalbacorretor-a11y.github.io/rede-sulamerica/" },
+    { id: "sulamerica", nome: "SulAmérica", longo: " Saúde", url: "https://dallalbacorretor-a11y.github.io/rede-sulamerica/" },
     { id: "comparativo", nome: "Comparativo" }
   ];
   var eu = document.currentScript;
